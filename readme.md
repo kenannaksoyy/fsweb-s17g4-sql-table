@@ -85,35 +85,77 @@ Aşağıda tablolar ve şemaları verilmiş.
 [ ] Aşağıda istenen değişiklikleri tablolarda yapacak SQL ifadeleri yazınız.
 
    1- öğrenci tablosuna 'sehir' alanı ekleyiniz.
+   
+		alter table ogrenci add column sehir varchar(30);
+		alter table ogrenci add column ilce varchar(30) after puan;
 
 
    2- tablolarda veri olarak tarih geçen alanlarda veri tipini string yerine DateTime olarak ayarlayınız.
+   
+		alter table ogrenci change column dtarih dtarih datetime;
+		alter table islem
+		modify column atarih datetime,
+		modify column vtarih datetime;
 
 
    3- öğrenci tablosuna 'dogum_yeri' alanı ekleyiniz ve default değerini 'Türkiye' yapınız.
+   
+		alter table ogrenci add column dogum_yeri varchar(30) default "Turkiye";
+		select * from ogrenci;
 
 
    4- öğrenci tablosundan 'puan' alanını siliniz.
+   
+		alter table ogrenci drop puan;
 
 
    5- öğrenciler tablosundaki kiz öğrencileri alarak kiz_ogrenciler tablosu oluşturunuz.
    
+		create table `kizogrenciler` as (
+		select * from ogrenci where cinsiyet="K"
+		);
+		select * from kizogrenciler;
    
    6- kiz_ogrenciler tablosunu siliniz.
+   
+		drop table kizogrenciler;
 
 
    7- kiz_yurdu tablosu oluşturunuz(sadece 'ad' alanı olsun). 1 kayıt ekleyiniz.
       öğrenci tablosundaki kız öğrencileri kullanarak kiz_yurdunda_kalanlar tablosu oluşturunuz
+	  
+		create table `kizyurdu` (
+			id int primary key auto_increment,
+			ad text not null 
+		);
+		insert into kizyurdu (ad) values ("vadi");
+		select * from kizyurdu;
+		
+		create table `kiz_yurdu_ogrenciler` as (
+		select 1 as yurt_id, id as ogrenciid from kizogrenciler
+		);
+		select * from kiz_yurdu_ogrenciler;
 
 
    8- kiz_ogrenciler tablosunun adını kogrenciler olarak değiştiriniz
+   
+		alter table kiz_yurdu_ogrenciler rename to `kogrenciler`;
 
 
    9- yazar tablosundaki 'ad' alanının adını 'name' olarak güncelleyiniz.
+   
+		alter table yazar change column ad name varchar(30) not null;
+		alter table yazar change column name isim varchar(30) not null;
 
 
    10- yazar tablosuna 'ulke' ve 'universite' alanları ekleyiniz 'ulke'nin default değeri 'Türkiye' olsun.
+		
+		alter table yazar add column ulke varchar(30) default "Turkiye";
+		alter table yazar add column universite varchar(30);
+		select * from yazar;
 
-
-   11- tablo ilişkilerine 5'er tane örnek veriniz (1-1, 1-n, n-n)  
+   11- tablo ilişkilerine 5'er tane örnek veriniz (1-1, 1-n, n-n)
+		1-1 TC kimlik, TC ehliyet, türkiyede isen ev araba
+		1-n saat, yurtdışında ev araba, vatandaşlık, kitap, çalışan, çift anadal
+		n-n workintech bootcamp
 
